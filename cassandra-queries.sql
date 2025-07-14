@@ -69,3 +69,18 @@ Insert into employee_multi_cluster(id,name,dept,designation,salary) values (8,'P
 Insert into employee_multi_cluster(id,name,dept,designation,salary) values (9,'Monica','IT','Tester',23400);
 Insert into employee_multi_cluster(id,name,dept,designation,salary) values (10,'Rachel','HR','Manager',25000);
 
+-- ----------------------------------------------------------------------------------
+
+-- Multi Partition Table 
+
+Create table employee_multipartition
+(
+    id int, name text, salary float, dept text, designation text,
+    primary key((dept,designation),id)
+
+
+)
+
+Insert into employee_multipartition(id,name,dept,designation,salary) values (8,'Phoebe','HR','Exec',21000);
+Insert into employee_multipartition(id,name,dept,designation,salary) values (9,'Monica','IT','Tester',23400);
+Insert into employee_multipartition(id,name,dept,designation,salary) values (10,'Rachel','HR','Manager',25000);
