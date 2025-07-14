@@ -58,5 +58,14 @@ CREATE TABLE attendance (
 -- Partition Key: school_id
 -- Clustering Key: student_id, date
 
+-- ------------------------------------------------------------------------------------------------
 
+ Create table employee_multi_cluster
+             (id int, name text, salary float, dept text, designation text,
+            primary key(dept, id, designation));
+
+
+Insert into employee_multi_cluster(id,name,dept,designation,salary) values (8,'Phoebe','HR','Exec',21000);
+Insert into employee_multi_cluster(id,name,dept,designation,salary) values (9,'Monica','IT','Tester',23400);
+Insert into employee_multi_cluster(id,name,dept,designation,salary) values (10,'Rachel','HR','Manager',25000);
 
