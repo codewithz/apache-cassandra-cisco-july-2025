@@ -140,3 +140,10 @@ cqlsh:cisco_ks> select * from accountotp;
   1 |  Tom | 9867
 
 
+
+
+INSERT INTO sessions (session_id, user_id, login_time)
+VALUES (123, 456, toTimestamp(now()))
+USING TTL 3600;
+
+-- After 3600 seconds (1 hour), the entire row will be deleted.
