@@ -77,10 +77,38 @@ Create table employee_multipartition
 (
     id int, name text, salary float, dept text, designation text,
     primary key((dept,designation),id)
-
-
 )
 
 Insert into employee_multipartition(id,name,dept,designation,salary) values (8,'Phoebe','HR','Exec',21000);
 Insert into employee_multipartition(id,name,dept,designation,salary) values (9,'Monica','IT','Tester',23400);
 Insert into employee_multipartition(id,name,dept,designation,salary) values (10,'Rachel','HR','Manager',25000);
+
+-- Cassandra requires that clustering columns be queried in order, 
+-- and you cannot skip clustering keys unless you specify all preceding ones.
+
+-- -------------------------------write time-----------------------------------------------------------------
+
+ Select dept,id,name,writetime(name) from employee;
+
+ -- The writetime function returns the time at which a column was last written to in microseconds since the epoch (January 1, 1970).
+
+ -- -----------------------------Update -------------------------------------------------------------------------------
+
+update employee set name='Tommy' where dept='IT' and id=1;
+
+
+1. Update will insert if the value we are trying to update doesnt exist already 
+
+
+name=Penny
+dept=Admin
+designation=Manager
+salary=30000
+id=89
+ 
+ Update employee set name='Penny',designation='Manager',salary=30000 where dept='Admin' and id=89;
+
+ 2. If trying to insert an already existing record, it will update it 
+
+ Insert into employee(id,name,dept,designation,salary) values (6,'Chandler Bing','Sales','Team Lead',450000)
+
