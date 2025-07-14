@@ -18,3 +18,45 @@ INSERT INTO employee(id, name, dept, designation, salary) VALUES (7, 'Joey', 'HR
 INSERT INTO employee(id, name, dept, designation, salary) VALUES (8, 'Phoebe', 'HR', 'Exec', 21000);
 INSERT INTO employee(id, name, dept, designation, salary) VALUES (9, 'Monica', 'IT', 'Tester', 23400);
 INSERT INTO employee(id, name, dept, designation, salary) VALUES (10, 'Rachel', 'HR', 'Manager', 25000);
+-- Cabinet --> Drawer --> File
+-- Keyspace --> Table --> Partition Key --> Clustering Key
+
+
+CREATE TABLE [IF NOT EXISTS] keyspace_name.table_name (
+    column_name data_type,
+    ...
+    PRIMARY KEY (partition_key [, clustering_column1, clustering_column2, ...])
+);
+
+
+
+Create Table employee(
+    id int, name text, salary float, dept text, designation text,
+    primary key(dept,id)  
+)
+-- Partition Key: dept
+-- Clustering Key: id
+
+CREATE TABLE attendance (
+    school_id INT,
+    student_id INT,
+    date DATE,
+    status TEXT,
+    PRIMARY KEY ((school_id, student_id), date)
+);
+-- Partition Key: school_id, student_id
+-- Clustering Key: date
+
+
+CREATE TABLE attendance (
+    school_id INT,
+    student_id INT,
+    date DATE,
+    status TEXT,
+    PRIMARY KEY (school_id, student_id, date)
+);
+-- Partition Key: school_id
+-- Clustering Key: student_id, date
+
+
+
