@@ -112,3 +112,31 @@ id=89
 
  Insert into employee(id,name,dept,designation,salary) values (6,'Chandler Bing','Sales','Team Lead',450000)
 
+ Create table accountotp(id int PRIMARY KEY,name text, otp int);
+
+cqlsh:cisco_ks>
+cqlsh:cisco_ks> Insert into accountotp(id ,name,otp) values (1,'Tom',2025);
+cqlsh:cisco_ks>
+cqlsh:cisco_ks>
+cqlsh:cisco_ks> Update accountotp using ttl 60 set otp=9867 where id=1;
+cqlsh:cisco_ks> select * from accountotp;
+
+ id | name | otp
+----+------+------
+  1 |  Tom | 9867
+
+(1 rows)
+cqlsh:cisco_ks> select * from accountotp;
+
+ id | name | otp
+----+------+------
+  1 |  Tom | 9867
+
+(1 rows)
+cqlsh:cisco_ks> select * from accountotp;
+
+ id | name | otp
+----+------+------
+  1 |  Tom | 9867
+
+
