@@ -281,3 +281,6 @@ Insert into todo(id,name,todo) values (1,'Zartab',{1:'Collect Medicine for Mothe
                   ... ;
 
 
+                  update todos set todo=todo-{4} where id=1;
+
+
