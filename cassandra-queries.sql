@@ -284,3 +284,56 @@ Insert into todo(id,name,todo) values (1,'Zartab',{1:'Collect Medicine for Mothe
                   update todos set todo=todo-{4} where id=1;
 
 
+-- Consistency Examples
+
+cqlsh:social_app> CREATE KEYSPACE blog_space WITH REPLICATION ={'class':'NetworkTopologyStrategy','DC1':2,'DC2':1};
+cqlsh:social_app> CREATE TABLE articles (
+              ... article_id UUID PRIMARY KEY,
+              ... title TEXT,
+              ... author TEXT,
+              ... category TEXT);
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'Cassandra Basics', 'Alice', 'Database');
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'Consistency Explained', 'Bob', 'Internals');
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'Replication in Cassandra', 'Zartab', 'Internals');
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'How Memtable Works', 'Eve', 'Memory');
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'Partitioning and Keys', 'Mallory', 'Performance');
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'NetworkTopologyStrategy Guide', 'Trent', 'Architecture');
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'Query with Quorum', 'Victor', 'Consistency');
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'Understanding SSTables', 'Bob', 'Storage');
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'Tombstones and Deletes', 'Carol', 'Advanced');
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO articles (article_id, title, author, category)
+              ... VALUES (uuid(), 'Cassandra in Production', 'Alice', 'DevOps');
+cqlsh:social_app> select * from articles;
+
+ article_id                           | author  | category     | title
+--------------------------------------+---------+--------------+-------------------------------
+ 411fc0bb-8c43-4a2c-bd43-de3a189a1a11 |     Bob |      Storage |        Understanding SSTables
+ 60a82a74-76e6-47d0-8740-2897c3912ade | Mallory |  Performance |         Partitioning and Keys
+ 84f39b24-6d5e-4fe2-bb86-5c0cd8148640 |   Carol |     Advanced |        Tombstones and Deletes
+ 35320fc6-f54e-4c13-a10f-adce3e949386 |   Trent | Architecture | NetworkTopologyStrategy Guide
+ e55ade58-46b1-4d26-aebb-8bc2247d6990 |  Victor |  Consistency |             Query with Quorum
+ 298e9370-e871-42c8-8c3d-57627e874617 |     Bob |    Internals |         Consistency Explained
+ 201f3f55-04c2-4665-8243-ae1e41edd631 |     Eve |       Memory |            How Memtable Works
+ be0fff0d-18a7-4441-bb31-a29ace47f90b |  Zartab |    Internals |      Replication in Cassandra
+ 700d53eb-c8fc-408c-b64f-2370036da689 |   Alice |       DevOps |       Cassandra in Production
+ 6ba21a45-285e-4a3e-9208-931fd449dea9 |   Alice |     Database |              Cassandra Basics
+
+
