@@ -1,7 +1,7 @@
 version: '3'
 services:
   n1:
-    image: cassandra:latest
+    image: cassandra:3.11
     networks:
       - cluster
     environment:
@@ -9,7 +9,7 @@ services:
       - CASSANDRA_DC=DC1
       - CASSANDRA_RACK=RAC1
   n2:
-    image: cassandra:latest
+    image: cassandra:3.11
     networks:
       - cluster
     environment:
@@ -20,7 +20,7 @@ services:
     depends_on:
       - n1
   n3:
-    image: cassandra:latest
+    image: cassandra:3.11
     networks:
       - cluster
     environment:
