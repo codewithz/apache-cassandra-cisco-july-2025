@@ -180,3 +180,66 @@ cqlsh:social_app> Select * from posts;
  user_id                              | posted_on                       | content         | post_id
 --------------------------------------+---------------------------------+-----------------+--------------------------------------
  63ca4753-d29b-41a3-af79-e506649fc57d | 2025-07-15 06:35:54.069000+0000 | Hello from DC1! | fd211d3a-c471-4a6a-b5ef-bf0406514b96
+
+ -- Tracing Cassandra with Network Topology Strategy
+
+ cqlsh:social_app> TRACING ON;
+TRACING set to ON
+cqlsh:social_app> INSERT INTO posts (post_id, user_id, content, posted_on) VALUES (
+              ...               ...   uuid(), uuid(), 'Hello from DC1!', toTimestamp(now())
+              ...               ... );
+SyntaxException: line 2:14 no viable alternative at input '..' (...content, posted_on) VALUES (              [..]...)
+cqlsh:social_app> INSERT INTO posts (post_id, user_id, content, posted_on) VALUES (   uuid(), uuid(), 'Hello from DC1!', toTimestamp(now()) );
+
+Tracing session: cf224520-6146-11f0-8c27-9f5b4c3f63d7
+
+ activity                                                                                                                                                           | timestamp                  | source     | source_elapsed | client
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------+------------+----------------+-----------
+                                                                                                                                                 Execute CQL3 query | 2025-07-15 06:41:59.922000 | 172.22.0.2 |              0 | 127.0.0.1
+ Parsing INSERT INTO posts (post_id, user_id, content, posted_on) VALUES (   uuid(), uuid(), 'Hello from DC1!', toTimestamp(now()) ); [Native-Transport-Requests-1] | 2025-07-15 06:41:59.923000 | 172.22.0.2 |            498 | 127.0.0.1
+                                                                                                                  Preparing statement [Native-Transport-Requests-1] | 2025-07-15 06:41:59.924000 | 172.22.0.2 |           1143 | 127.0.0.1
+                                                                                                    Determining replicas for mutation [Native-Transport-Requests-1] | 2025-07-15 06:41:59.925000 | 172.22.0.2 |           2299 | 127.0.0.1
+                                  Sending mutation to remote replica Full(/172.22.0.4:7000,(1180247101545117923,1779035269665644201]) [Native-Transport-Requests-1] | 2025-07-15 06:41:59.926000 | 172.22.0.2 |           3136 | 127.0.0.1
+                                                                                                                           Appending to commitlog [MutationStage-2] | 2025-07-15 06:41:59.926001 | 172.22.0.2 |           3291 | 127.0.0.1
+                                                                  Sending MUTATION_REQ message to /172.22.0.3:7000 message size 141 bytes [Messaging-EventLoop-3-4] | 2025-07-15 06:41:59.926002 | 172.22.0.2 |           3436 | 127.0.0.1
+                                                                                                                         Adding to posts memtable [MutationStage-2] | 2025-07-15 06:41:59.926003 | 172.22.0.2 |           3646 | 127.0.0.1
+                                                                 Sending MUTATION_REQ message to /172.22.0.4:7000 message size 141 bytes [Messaging-EventLoop-3-10] | 2025-07-15 06:41:59.926004 | 172.22.0.2 |           3681 | 127.0.0.1
+                                                                                     MUTATION_REQ message received from /172.22.0.2:7000 [Messaging-EventLoop-3-13] | 2025-07-15 06:41:59.930000 | 172.22.0.3 |            544 | 127.0.0.1
+                                                                                     MUTATION_REQ message received from /172.22.0.2:7000 [Messaging-EventLoop-3-13] | 2025-07-15 06:41:59.930000 | 172.22.0.4 |            578 | 127.0.0.1
+                                                                                                                           Appending to commitlog [MutationStage-1] | 2025-07-15 06:41:59.935000 | 172.22.0.3 |           6346 | 127.0.0.1
+                                                                                                                         Adding to posts memtable [MutationStage-1] | 2025-07-15 06:41:59.936000 | 172.22.0.3 |           6745 | 127.0.0.1
+                                                                                                           Enqueuing response to /172.22.0.2:7000 [MutationStage-1] | 2025-07-15 06:41:59.936001 | 172.22.0.3 |           6997 | 127.0.0.1
+                                                                                                                           Appending to commitlog [MutationStage-1] | 2025-07-15 06:41:59.937000 | 172.22.0.4 |           7719 | 127.0.0.1
+                                                                 Sending MUTATION_RSP message to n1/172.22.0.2:7000 message size 33 bytes [Messaging-EventLoop-3-1] | 2025-07-15 06:41:59.938000 | 172.22.0.3 |           9108 | 127.0.0.1
+                                                                                                                         Adding to posts memtable [MutationStage-1] | 2025-07-15 06:41:59.938000 | 172.22.0.4 |           8555 | 127.0.0.1
+                                                                                                           Enqueuing response to /172.22.0.2:7000 [MutationStage-1] | 2025-07-15 06:41:59.939000 | 172.22.0.4 |           9069 | 127.0.0.1
+                                                                                     MUTATION_RSP message received from /172.22.0.3:7000 [Messaging-EventLoop-3-14] | 2025-07-15 06:41:59.940000 | 172.22.0.2 |             76 | 127.0.0.1
+                                                                 Sending MUTATION_RSP message to n1/172.22.0.2:7000 message size 33 bytes [Messaging-EventLoop-3-1] | 2025-07-15 06:41:59.940000 | 172.22.0.4 |          10574 | 127.0.0.1
+                                                                                                 Processing response from /172.22.0.3:7000 [RequestResponseStage-3] | 2025-07-15 06:41:59.940001 | 172.22.0.2 |            664 | 127.0.0.1
+                                                                                     MUTATION_RSP message received from /172.22.0.4:7000 [Messaging-EventLoop-3-13] | 2025-07-15 06:41:59.941000 | 172.22.0.2 |             13 | 127.0.0.1
+                                                                                                 Processing response from /172.22.0.4:7000 [RequestResponseStage-1] | 2025-07-15 06:41:59.941001 | 172.22.0.2 |            136 | 127.0.0.1
+                                                                                                                                                   Request complete | 2025-07-15 06:41:59.926129 | 172.22.0.2 |           4129 | 127.0.0.1
+
+
+cqlsh:social_app> select * from posts;
+
+ user_id                              | posted_on                       | content         | post_id
+--------------------------------------+---------------------------------+-----------------+--------------------------------------
+ 63ca4753-d29b-41a3-af79-e506649fc57d | 2025-07-15 06:35:54.069000+0000 | Hello from DC1! | fd211d3a-c471-4a6a-b5ef-bf0406514b96
+ 21785f34-92c5-490f-ad5a-bc338d089197 | 2025-07-15 06:41:59.924000+0000 | Hello from DC1! | f3cb7d03-c52c-4484-aa1e-425e6b538282
+
+(2 rows)
+
+Tracing session: e42dfef0-6146-11f0-8c27-9f5b4c3f63d7
+
+ activity                                                                                                                   | timestamp                  | source     | source_elapsed | client
+----------------------------------------------------------------------------------------------------------------------------+----------------------------+------------+----------------+-----------
+                                                                                                         Execute CQL3 query | 2025-07-15 06:42:35.231000 | 172.22.0.2 |              0 | 127.0.0.1
+                                                                 Parsing select * from posts; [Native-Transport-Requests-1] | 2025-07-15 06:42:35.231001 | 172.22.0.2 |            383 | 127.0.0.1
+                                                                          Preparing statement [Native-Transport-Requests-1] | 2025-07-15 06:42:35.231002 | 172.22.0.2 |            629 | 127.0.0.1
+                                                                    Computing ranges to query [Native-Transport-Requests-1] | 2025-07-15 06:42:35.232000 | 172.22.0.2 |           1136 | 127.0.0.1
+ Submitting range requests on 65 ranges with a concurrency of 1 (0.0 rows per range expected) [Native-Transport-Requests-1] | 2025-07-15 06:42:35.232001 | 172.22.0.2 |           1458 | 127.0.0.1
+                                                        Submitted 1 concurrent range requests [Native-Transport-Requests-1] | 2025-07-15 06:42:35.235000 | 172.22.0.2 |           4087 | 127.0.0.1
+              Executing seq scan across 0 sstables for (min(-9223372036854775808), min(-9223372036854775808)] [ReadStage-3] | 2025-07-15 06:42:35.235001 | 172.22.0.2 |           4217 | 127.0.0.1
+                                                                       Read 2 live rows and 0 tombstone cells [ReadStage-3] | 2025-07-15 06:42:35.235002 | 172.22.0.2 |           4500 | 127.0.0.1
+                                                                                           
