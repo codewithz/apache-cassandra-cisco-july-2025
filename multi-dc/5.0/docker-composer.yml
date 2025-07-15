@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  n1:
+    container_name: n1
+    image: cassandra:5.0
+    networks:
+      - cluster
+    environment:
+      - CASSANDRA_CLUSTER_NAME=SocialCluster
+      - CASSANDRA_DC=DC1
+      - CASSANDRA_RACK=RAC1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+    ports:
+      - "9042:9042"   # CQL
+      - "7000:7000"   # Gossip
+    volumes:
+      - ./rackdc/dc1_rac1:/etc/cassandra
+
+  n2:
+    container_name: n2
+    image: cassandra:5.0
+    networks:
+      - cluster
+    environment:
+      - CASSANDRA_SEEDS=n1
+      - CASSANDRA_CLUSTER_NAME=SocialCluster
+      - CASSANDRA_DC=DC1
+      - CASSANDRA_RACK=RAC2
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+    depends_on:
+      - n1
+    volumes:
+      - ./rackdc/dc1_rac2:/etc/cassandra
+
+  n3:
+    container_name: n3
+    image: cassandra:5.0
+    networks:
+      - cluster
+    environment:
+      - CASSANDRA_SEEDS=n1
+      - CASSANDRA_CLUSTER_NAME=SocialCluster
+      - CASSANDRA_DC=DC2
+      - CASSANDRA_RACK=RAC1
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+    depends_on:
+      - n1
+    volumes:
+      - ./rackdc/dc2_rac1:/etc/cassandra
+
+  n4:
+    container_name: n4
+    image: cassandra:5.0
+    networks:
+      - cluster
+    environment:
+      - CASSANDRA_SEEDS=n1
+      - CASSANDRA_CLUSTER_NAME=SocialCluster
+      - CASSANDRA_DC=DC2
+      - CASSANDRA_RACK=RAC2
+      - CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch
+      - MAX_HEAP_SIZE=512M
+      - HEAP_NEWSIZE=100M
+    depends_on:
+      - n1
+    volumes:
+      - ./rackdc/dc2_rac2:/etc/cassandra
+
+networks:
+  cluster:
