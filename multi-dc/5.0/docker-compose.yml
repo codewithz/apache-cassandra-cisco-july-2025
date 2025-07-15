@@ -17,7 +17,7 @@ services:
       - "9042:9042"   # CQL
       - "7000:7000"   # Gossip
     volumes:
-      - ./rackdc/dc1_rac1:/etc/cassandra
+      - ./rackdc/dc1_rac1/cassandra-rackdc.properties:/etc/cassandra/cassandra-rackdc.properties
 
   n2:
     container_name: n2
@@ -35,7 +35,7 @@ services:
     depends_on:
       - n1
     volumes:
-      - ./rackdc/dc1_rac2:/etc/cassandra
+      - ./rackdc/dc1_rac2/cassandra-rackdc.properties:/etc/cassandra/cassandra-rackdc.properties
 
   n3:
     container_name: n3
@@ -53,7 +53,7 @@ services:
     depends_on:
       - n1
     volumes:
-      - ./rackdc/dc2_rac1:/etc/cassandra
+      - ./rackdc/dc2_rac1/cassandra-rackdc.properties:/etc/cassandra/cassandra-rackdc.properties
 
   n4:
     container_name: n4
@@ -71,7 +71,7 @@ services:
     depends_on:
       - n1
     volumes:
-      - ./rackdc/dc2_rac2:/etc/cassandra
+      - ./rackdc/dc2_rac2/cassandra-rackdc.properties:/etc/cassandra/cassandra-rackdc.properties
 
 networks:
   cluster:
