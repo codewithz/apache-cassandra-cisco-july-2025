@@ -369,5 +369,22 @@ Select * from articles;
 -- Seq‑scan across 0 SSTables – data was still in memtables; no disk I/O, hence fast per‑range but overall still expensive due to 65 sequential ranges.
 
 
- article_id                           | author  | category     | title
+ 
+INSERT INTO articles (article_id, title, author, category) VALUES (uuid(), 'Cassandra with Java', 'Z', 'Cassandra');
+
+| **Step** | **Activity**                               | **Explanation**                                                                                          |
+| -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| 1        | `Execute CQL3 query`                       | Client sends the query to Cassandra coordinator (Node `172.22.0.2`)                                      |
+| 2        | `Parsing`                                  | SQL string is parsed into internal representation                                                        |
+| 3        | `Preparing statement`                      | Internal preparation of the INSERT logic                                                                 |
+| 4        | `Determining replicas for mutation`        | Cassandra calculates which nodes the data should go to (based on partition key and replication strategy) |
+| 5        | `Appending to commitlog`                   | The write is saved **sequentially** to a commit log for durability (like a receipt)                      |
+| 6        | `Adding to articles memtable`              | Data is stored in an in-memory structure (Memtable)                                                      |
+| 7        | `Sending mutation to remote replicas`      | The coordinator (n1) sends data to other nodes (`n3`, `n4`) responsible for storing replicas             |
+| 8        | `MUTATION_REQ message received`            | The target replica node receives the write request                                                       |
+| 9        | `Appending to commitlog` (on replica)      | Again, write is saved to commit log on replica node                                                      |
+| 10       | `Adding to articles memtable` (on replica) | Data is written to the in-memory memtable on the replica                                                 |
+| 11       | `Enqueuing & Sending MUTATION_RSP`         | Replica sends back an acknowledgment (`MUTATION_RSP`) to coordinator                                     |
+| 12       | `Processing response`                      | Coordinator receives responses from enough replicas (depends on consistency level — assumed QUORUM)      |
+| 13       | `Request complete`                         | Coordinator sends back `Success` to the client                                                           |
 
