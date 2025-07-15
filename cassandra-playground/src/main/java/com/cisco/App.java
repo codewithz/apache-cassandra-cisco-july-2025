@@ -11,17 +11,28 @@ public class App {
         try (CqlSession session = CqlSession.builder().build()) {
             System.out.println("✅ Connected to Cassandra!");
 
-            session.execute("CREATE KEYSPACE IF NOT EXISTS demo_java WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};");
-            session.execute("USE demo_java;");
-            session.execute("CREATE TABLE IF NOT EXISTS articles (id UUID PRIMARY KEY, title TEXT, author TEXT);");
-            session.execute("INSERT INTO articles (id, title, author) VALUES (uuid(), 'Cassandra with Java', 'Z');");
+            // Create keyspace using NetworkTopologyStrategy
+            session.execute("CREATE KEYSPACE IF NOT EXISTS blog_space_java " +
+                    "WITH replication = {'class':'NetworkTopologyStrategy', 'DC1': 2, 'DC2': 1};");
 
-            session.execute("SELECT * FROM articles").forEach(row ->
+            // Set keyspace context (note: USE is not supported in DataStax Java driver, so set in each query)
+            session.execute("CREATE TABLE IF NOT EXISTS blog_space_java.posts (" +
+                    "id UUID PRIMARY KEY, " +
+                    "title TEXT, " +
+                    "author TEXT);");
+
+            // Insert a row
+            session.execute("INSERT INTO blog_space_java.posts (id, title, author) " +
+                    "VALUES (uuid(), 'Cassandra with Java', 'Z');");
+
+            // Select all rows
+            session.execute("SELECT * FROM blog_space_java.posts").forEach(row ->
                     System.out.println("📘 " + row.getString("title") + " by " + row.getString("author"))
             );
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }
