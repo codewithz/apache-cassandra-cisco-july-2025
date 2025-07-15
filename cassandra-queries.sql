@@ -336,4 +336,38 @@ cqlsh:social_app> select * from articles;
  700d53eb-c8fc-408c-b64f-2370036da689 |   Alice |       DevOps |       Cassandra in Production
  6ba21a45-285e-4a3e-9208-931fd449dea9 |   Alice |     Database |              Cassandra Basics
 
+CONSISTENCY QUORUM;
+Select * from articles;
+
+-- CONSISTENCY QUORUM;
+-- SELECT * FROM articles;
+-- on a cluster with RF = 3 (two replicas are in DC 1: 172.22.0.2 & 172.22.0.3; the third is probably in another DC or down).
+-- Because you queried all rows without a partition key, Cassandra performs a range scan across the whole ring.
+
+-- Elapsed (µs)	Trace Message	What’s Happening
+--  0 	 Execute CQL3 query	Client request lands on 172.22.0.2 (coordinator).
+--  500 	 Parsing …	CQL statement parsed on the coordinator (Native‑Transport thread).
+--  790 	 Preparing statement	Prepared‑statement lookup / metadata check.
+--  1 866 	 Computing ranges to query	Because there’s no partition key, coordinator must fetch all token ranges.
+--  2 131 	 Submitting range requests on 65 ranges (concurrency = 1)	Cluster has 65 vnodes; coordinator will query them sequentially (slow).
+--  3 151 	 Enqueuing request to /172.22.0.2 …	First range‑request targeted at local replica (172.22.0.2).
+--  3 520 	 Enqueuing request to /172.22.0.3 …	Same range sent to remote replica (172.22.0.3). With QUORUM (RF = 3) the coordinator needs 2 replica responses.
+--  3 769 – 4 789 	 Sending RANGE_REQ … / RANGE_REQ received	Messages move over internode port 7000.
+--  5 274 	 Executing seq scan across 0 SSTables … (172.22.0.2)	Replica scans memtable (no SSTables) for that token slice.
+--  5 762 	 Read 10 live rows …	Replica returns 10 rows, 0 tombstones.
+--  6 058 	 RANGE_RSP sent back to coordinator	First response in.
+--  7 108 	 Second replica (172.22.0.3) finishes scan and replies	Now two replicas have replied → QUORUM satisfied.
+--  19 157 	 Request complete	Coordinator aggregates results from all needed ranges and returns result set to the client.
+
+-- 🔑 Key Take‑aways
+-- Range scan – because you selected without a partition key, the coordinator visited all 65 vnodes.
+
+-- Consistency = QUORUM – With RF = 3, the coordinator waits for 2 replica acknowledgements per range.
+
+-- Two replicas answered (172.22.0.2 & 172.22.0.3) → quorum achieved, request completed.
+
+-- Seq‑scan across 0 SSTables – data was still in memtables; no disk I/O, hence fast per‑range but overall still expensive due to 65 sequential ranges.
+
+
+ article_id                           | author  | category     | title
 
