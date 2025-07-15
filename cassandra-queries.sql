@@ -263,3 +263,21 @@ List -- Notation Used -- [, , , ,]
 Create table batsmen (id int primary key, name text, country text, last5scores list<int>);
 
 Insert into batsmen(id,name,country,last5scores) values (1,'Virat Kohli','India',[23,100,123,34,76]);
+
+-- Set 
+-- Notation Used -- {, , , ,}
+
+Create table passportholder(id int primary key, name text, passport set<text>);
+
+Insert into passportholder(id,name,passport) values (1,'John Doe',{'A1234567','B2345678','A1234567'});
+
+-- Map 
+-- Notation Used -- {, : , , : , , : }
+
+Create table todos(id int primary key, name text, todo map<int,text>);
+
+Insert into todo(id,name,todo) values (1,'Zartab',{1:'Collect Medicine for Mother',2:'Do Laundry',3:
+'Pay Electicity Bill',4:'Fill up petrol in car'});
+                  ... ;
+
+
