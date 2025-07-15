@@ -147,3 +147,36 @@ VALUES (123, 456, toTimestamp(now()))
 USING TTL 3600;
 
 -- After 3600 seconds (1 hour), the entire row will be deleted.
+
+------------------ Netowork Topology Strategy -----------------------------
+
+PS J:\Zartab\Trainings\2025\25-B-15-Cisco-Cassandra-Indai-July-2025\git_repo\multi-dc\5.0> docker exec -it n1 cqlsh
+Connected to SocialCluster at 127.0.0.1:9042
+[cqlsh 6.2.0 | Cassandra 5.0.4 | CQL spec 3.4.7 | Native protocol v5]
+Use HELP for help.
+cqlsh> CREATE KEYSPACE social_app
+   ... WITH REPLICATION={}
+   ... 'class':'NetworkTopologyStrategy',
+   ... 'DC1':2,
+   ... 'DC2':1
+   ... } and durable_writes=true;
+SyntaxException: line 3:0 mismatched input 'class' expecting EOF (... social_appWITH REPLICATION={}['clas]...)
+cqlsh> CREATE KEYSPACE social_app WITH REPLICATION={'class':'NetworkTopologyStrategy', 'DC1':2, 'DC2':1 } and durable_writes=true;
+cqlsh> USE social_app;
+cqlsh:social_app> CREATE TABLE posts (
+              ...     post_id UUID,
+              ...     user_id UUID,
+              ...     content TEXT,
+              ...     posted_on TIMESTAMP,
+              ...     PRIMARY KEY ((user_id), posted_on)
+              ... );
+
+cqlsh:social_app>
+cqlsh:social_app> INSERT INTO posts (post_id, user_id, content, posted_on) VALUES (
+              ...   uuid(), uuid(), 'Hello from DC1!', toTimestamp(now())
+              ... );
+cqlsh:social_app> Select * from posts;
+
+ user_id                              | posted_on                       | content         | post_id
+--------------------------------------+---------------------------------+-----------------+--------------------------------------
+ 63ca4753-d29b-41a3-af79-e506649fc57d | 2025-07-15 06:35:54.069000+0000 | Hello from DC1! | fd211d3a-c471-4a6a-b5ef-bf0406514b96
