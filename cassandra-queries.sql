@@ -254,3 +254,12 @@ Tracing session: e42dfef0-6146-11f0-8c27-9f5b4c3f63d7
 | **Executing seq scan across 0 SSTables for (min(‑∞), min(‑∞)]**                                                                    | On a replica’s **ReadStage** thread, Cassandra does a sequential scan of in‑memory structures and SSTables for that range. In this example it found everything in memtables (0 SSTables scanned). |
 | **Read 2 live rows and 0 tombstone cells**                                                                                         | The replica actually read two live rows (and no tombstones) for that range.                                                                                                                       |
 | *(The coordinator will repeat the last two steps for every remaining range, then merge results and send them back to the client.)* |                                                                                                                                                                                                   |
+
+
+-- Collection Types 
+
+List -- Notation Used -- [, , , ,]
+
+Create table batsmen (id int primary key, name text, country text, last5scores list<int>);
+
+Insert into batsmen(id,name,country,last5scores) values (1,'Virat Kohli','India',[23,100,123,34,76]);
