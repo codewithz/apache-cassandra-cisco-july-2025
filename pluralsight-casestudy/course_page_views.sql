@@ -86,3 +86,93 @@ cqlsh:pluralsight> select * from course_page_views;
 
 (7 rows)
 cqlsh:pluralsight>
+
+-- Bucketing Data to manage partition size
+
+drop table if exists course_page_views;
+
+CREATE TABLE course_page_views (
+    bucket_id varchar,
+    course_id text,
+    view_id timeuuid,
+    last_view_id timeuuid static,
+    PRIMARY KEY ((bucket_id, course_id), view_id)
+) WITH CLUSTERING ORDER BY (view_id DESC);
+
+-- Insert 5 records for May, June, and July with last_view_id for each bucket
+
+-- May 2025
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'react-big-picture', minTimeuuid('2025-05-01T10:00:00Z'), maxTimeuuid('2025-05-31T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'react-big-picture', minTimeuuid('2025-05-10T12:00:00Z'), maxTimeuuid('2025-05-31T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'react-big-picture', minTimeuuid('2025-05-15T14:00:00Z'), maxTimeuuid('2025-05-31T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'react-big-picture', minTimeuuid('2025-05-20T16:00:00Z'), maxTimeuuid('2025-05-31T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'react-big-picture', minTimeuuid('2025-05-25T18:00:00Z'), maxTimeuuid('2025-05-31T23:59:59Z'));
+
+-- June 2025
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'react-big-picture', minTimeuuid('2025-06-01T10:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'react-big-picture', minTimeuuid('2025-06-08T12:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'react-big-picture', minTimeuuid('2025-06-15T14:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'react-big-picture', minTimeuuid('2025-06-22T16:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'react-big-picture', minTimeuuid('2025-06-29T18:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+
+-- July 2025
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'react-big-picture', minTimeuuid('2025-07-01T10:00:00Z'), maxTimeuuid('2025-07-31T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'react-big-picture', minTimeuuid('2025-07-10T12:00:00Z'), maxTimeuuid('2025-07-31T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'react-big-picture', minTimeuuid('2025-07-15T14:00:00Z'), maxTimeuuid('2025-07-31T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'react-big-picture', minTimeuuid('2025-07-20T16:00:00Z'), maxTimeuuid('2025-07-31T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'react-big-picture', minTimeuuid('2025-07-25T18:00:00Z'), maxTimeuuid('2025-07-31T23:59:59Z'));
+
+
+-- May 2025 - other course
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'nodejs-big-picture', minTimeuuid('2025-05-01T10:00:00Z'), maxTimeuuid('2025-05-25T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'nodejs-big-picture', minTimeuuid('2025-05-10T12:00:00Z'), maxTimeuuid('2025-05-25T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'nodejs-big-picture', minTimeuuid('2025-05-15T14:00:00Z'), maxTimeuuid('2025-05-25T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'nodejs-big-picture', minTimeuuid('2025-05-20T16:00:00Z'), maxTimeuuid('2025-05-25T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-05', 'nodejs-big-picture', minTimeuuid('2025-05-25T18:00:00Z'), maxTimeuuid('2025-05-25T23:59:59Z'));
+
+-- June 2025 - other course
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'nodejs-big-picture', minTimeuuid('2025-06-01T10:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'nodejs-big-picture', minTimeuuid('2025-06-08T12:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'nodejs-big-picture', minTimeuuid('2025-06-15T14:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'nodejs-big-picture', minTimeuuid('2025-06-22T16:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-06', 'nodejs-big-picture', minTimeuuid('2025-06-29T18:00:00Z'), maxTimeuuid('2025-06-30T23:59:59Z'));
+
+-- July 2025 - other course (today's date)
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'nodejs-big-picture', minTimeuuid('2025-07-01T10:00:00Z'), maxTimeuuid(toTimestamp(now())));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'nodejs-big-picture', minTimeuuid('2025-07-10T12:00:00Z'), maxTimeuuid(toTimestamp(now())));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'nodejs-big-picture', minTimeuuid('2025-07-15T14:00:00Z'), maxTimeuuid(toTimestamp(now())));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'nodejs-big-picture', minTimeuuid('2025-07-20T16:00:00Z'), maxTimeuuid(toTimestamp(now())));
+INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+VALUES ('2025-07', 'nodejs-big-picture', minTimeuuid('2025-07-25T18:00:00Z'), maxTimeuuid(toTimestamp(now())));
+
+
+select distinct course_id, toTimestamp(last_view_id) from course_page_views where course_id in ('nodejs-big-picture','react-big-picture') and bucket_id='2025-05' ;
