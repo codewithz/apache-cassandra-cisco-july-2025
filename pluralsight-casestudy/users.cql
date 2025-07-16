@@ -45,7 +45,7 @@ alter table users add last_login_with_ip map<text,frozen<tuple<timestamp,inet>>>
 update users set last_login_with_ip = last_login_with_ip + {'Apple MAC [12345]': ('2023-01-01 10:00:00', '192.168.1.1')} where id='1';
 
 
--- Indexes 
+-- Materialized View and Indexes 
 
 alter table users add company text;
 
@@ -71,6 +71,15 @@ InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot exe
 Create materialized view to allow filtering by company
 
 CREATE MATERIALIZED VIEW users_by_company AS
-SELECT * FROM users
-WHERE company IS NOT NULL
-PRIMARY KEY (company, id);
+               ...   SELECT * FROM users
+               ...   WHERE company IS NOT NULL AND id IS NOT NULL
+               ...   PRIMARY KEY (company, id);
+
+Warnings :
+Materialized views are experimental and are not recommended for production use.
+
+Select * from users_by_company where company='Tech Solutions';
+-- Create an index 
+
+CREATE INDEX ON users (company);
+Select * from users where company='Tech Solutions';
