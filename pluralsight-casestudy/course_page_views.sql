@@ -38,5 +38,6 @@ Select toTimestamp(view_id) from course_page_views where course_id='react-big-pi
 
 Select toTimestamp(view_id) from course_page_views where course_id='react-big-picture'
  and view_id >= minTimeuuid('2025-07-15T10:00:00Z') and view_id <= maxTimeuuid('2025-07-15T11:00:00Z');
+ 
 truncate course_page_views;
 
