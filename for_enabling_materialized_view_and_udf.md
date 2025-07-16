@@ -23,12 +23,14 @@ Search for:
 
 ```yaml
 materialized_views_enabled: false
+user_defined_functions_enabled: false
 ```
 
 Change it to:
 
 ```yaml
 materialized_views_enabled: true
+user_defined_functions_enabled: true
 ```
 
 Save the file.
