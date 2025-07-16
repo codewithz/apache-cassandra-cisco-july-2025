@@ -17,3 +17,14 @@ CREATE TABLE users(
 insert into users(id,first_name,last_name,email) values('1','John','Doe','john.doe@example.com');
 
 insert into users(id,first_name,last_name,email) values('2','Jane','Doe','jane.doe@example.com');
+
+
+-- using ttl 
+
+update users using ttl 120 set reset_token='abc123' where id='1';
+
+select ttl(reset_token) from users where id='1';
+
+ ttl(reset_token)
+------------------
+              101
