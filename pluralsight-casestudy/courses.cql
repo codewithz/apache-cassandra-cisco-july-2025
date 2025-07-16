@@ -499,3 +499,79 @@ VALUES ('advanced-python','Advanced Python', 'Robert Smallshire', 3, 13980, {'cc
     {name: 'Improving @invariant with ABCs',                duration: 269 },
     {name: 'Summary', duration: 262 }
   ]);
+
+
+-- insert and select in JSON format
+
+Select JSON module_id,clips from courses where id='nodejs-big-picture';
+
+INSERT INTO courses (id, name, author, audience, duration, features, released)
+VALUES ('raspberry-pi-for-developers','Raspberry Pi for Developers', 'Jon Flanders', 2, 8640, {'cc'}, '2013-05-30');
+
+
+INSERT INTO courses JSON '{
+     "id": "raspberry-pi-for-developers",
+     "module_id": 1,
+     "module_name": "Introduction to Raspberry Pi",
+     "module_duration": 1765,
+     "clips": [
+       { "name": "Introduction",                "duration": 206 },
+       { "name": "Hardware and Software",       "duration": 299 },
+       { "name": "Programming",                 "duration": 447 },
+       { "name": "Getting Set Up",              "duration": 335 },
+       { "name": "Demo: Intro to Raspberry Pi", "duration": 412 },
+       { "name": "Summary",                     "duration":  66 }
+     ]
+   }';
+
+   INSERT INTO courses JSON '{
+   "id": "raspberry-pi-for-developers",
+   "module_id": 2,
+   "module_name": "Programming the Raspberry Pi",
+   "module_duration": 2250,
+   "clips": [
+     { "name": "Introduction",            "duration":  12 },
+     { "name": "Programming Choices",     "duration": 190 },
+     { "name": "Python Basics",           "duration": 770 },
+     { "name": "Demo: Python",            "duration": 383 },
+     { "name": "Python and Raspberry Pi", "duration":  58 },
+     { "name": "Python GUI",              "duration":  42 },
+     { "name": "Demo: Python GUI",        "duration": 538 },
+     { "name": "Other languages",         "duration": 194 },
+     { "name": "Summary",                 "duration":  63 }
+   ]
+ }';
+
+  INSERT INTO courses (id, module_id, module_name, module_duration, clips)
+  VALUES ('raspberry-pi-for-developers', 3, 'Raspberry Pi and Hardware', 1877, [
+    {name: 'Introduction',             duration: 215 },
+    {name: 'GPIO',                     duration: 195 },
+    {name: 'Using a Breadboard',       duration: 100 },
+    {name: 'Using Bash',               duration:  84 },
+    {name: 'From Python',              duration:  52 },
+    {name: 'Demo: Hardware',           duration: 311 },
+    {name: 'Raspberry Pi and Arduino', duration: 387 },
+    {name: 'Demo: Pi with Arduino',    duration: 488 },
+    {name: 'Summary',                  duration:  45 }
+  ]);
+
+  INSERT INTO courses (id, module_id, module_name, module_duration, clips)
+  VALUES ('raspberry-pi-for-developers', 4, 'Raspberry Pi as a Web Server', 1592, [
+    {name: 'Introduction',            duration: 158 },
+    {name: 'Serving Up Static Files', duration: 102 },
+    {name: 'Demo: nginx',             duration: 163 },
+    {name: 'Dynamic Content',         duration:  99 },
+    {name: 'Demo:Python',             duration: 551 },
+    {name: 'Node.js',                 duration:  92 },
+    {name: 'Demo: Node.js',           duration: 410 },
+    {name: 'Summary',                 duration:  17 }
+  ]);
+
+  INSERT INTO courses (id, module_id, module_name, module_duration, clips)
+  VALUES ('raspberry-pi-for-developers', 5, 'Raspberry Pi as a DVR', 1197, [
+    {name: 'Introduction',                  duration:  53 },
+    {name: 'Getting XBMC',                  duration:  97 },
+    {name: 'XBMC Add-ons',                  duration: 293 },
+    {name: 'Demo: Building an XBMC Add-on', duration: 745 },
+    {name: 'Summary',                       duration:   9 }
+  ]);
