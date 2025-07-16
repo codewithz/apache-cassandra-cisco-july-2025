@@ -185,3 +185,9 @@ alter table courses add features set<text> static;
 update courses set features = {'video', 'audio', 'pdf','cc'} where id = 'react-big-picture';
 select distinct id,name,features from courses;
 update courses set features = features- {'pdf'} where id = 'react-big-picture';
+
+-- list  
+
+alter table courses add clips list<text>;
+
+update courses set clips= ['Introduction', 'Installation', 'Components'] where id = 'react-big-picture' amd module_id = 1;
