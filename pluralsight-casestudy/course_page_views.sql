@@ -247,3 +247,4 @@ _id='2025-07';
 
 (6 rows)
 cqlsh:pluralsight>
+

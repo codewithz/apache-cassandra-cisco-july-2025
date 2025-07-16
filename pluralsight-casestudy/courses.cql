@@ -173,3 +173,15 @@ VALUES ('raspberry-pi-for-developers','Raspberry Pi for Developers', 'Jon Flande
 
   INSERT INTO courses (id, module_id, module_name, module_duration)
   VALUES ('raspberry-pi-for-developers', 5, 'Raspberry Pi as a DVR', 1197);
+
+
+  -- Implement collections and user defined types (UDTs) in Cassandra
+
+
+alter table courses drop cc;
+
+alter table courses add features set<text> static;
+
+update courses set features = {'video', 'audio', 'pdf','cc'} where id = 'react-big-picture';
+select distinct id,name,features from courses;
+update courses set features = features- {'pdf'} where id = 'react-big-picture';
