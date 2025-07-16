@@ -191,3 +191,8 @@ update courses set features = features- {'pdf'} where id = 'react-big-picture';
 alter table courses add clips list<text>;
 
 update courses set clips= ['Introduction', 'Installation', 'Components'] where id = 'react-big-picture' amd module_id = 1;
+
+select * from courses where id = 'react-big-picture' and module_id = 1;
+
+-- map  
+

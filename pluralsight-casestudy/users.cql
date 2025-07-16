@@ -28,3 +28,9 @@ select ttl(reset_token) from users where id='1';
  ttl(reset_token)
 ------------------
               101
+
+
+
+alter table users add last_login map<text,timestamp>;
+
+update users set last_login = last_login + {'Apple MAC [12345]': '2023-01-01 10:00:00'} where id='1';
