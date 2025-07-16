@@ -34,3 +34,12 @@ select ttl(reset_token) from users where id='1';
 alter table users add last_login map<text,timestamp>;
 
 update users set last_login = last_login + {'Apple MAC [12345]': '2023-01-01 10:00:00'} where id='1';
+
+-- nesting of types 
+
+ alter table users drop last_login;
+select * from users;
+
+alter table users add last_login_with_ip map<text,frozen<tuple<timestamp,inet>>>;
+
+update users set last_login_with_ip = last_login_with_ip + {'Apple MAC [12345]': ('2023-01-01 10:00:00', '192.168.1.1')} where id='1';
