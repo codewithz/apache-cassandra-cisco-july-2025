@@ -176,3 +176,74 @@ VALUES ('2025-07', 'nodejs-big-picture', minTimeuuid('2025-07-25T18:00:00Z'), ma
 
 
 select distinct course_id, toTimestamp(last_view_id) from course_page_views where course_id in ('nodejs-big-picture','react-big-picture') and bucket_id='2025-05' ;
+
+
+cqlsh:pluralsight> INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id)
+               ... VALUES ('2025-07', 'nodejs-big-picture', now(),now());
+cqlsh:pluralsight> INSERT INTO course_page_views (bucket_id, course_id, view_id, last_view_id) VALUES ('2025-07', 'react-big-picture', now(),now());
+cqlsh:pluralsight> select * from course_page_views;
+
+ bucket_id | course_id          | view_id                              | last_view_id
+-----------+--------------------+--------------------------------------+--------------------------------------
+   2025-05 |  react-big-picture | 13485000-3992-11f0-8080-808080808080 | 5bc4d08f-3e7b-11f0-7f7f-7f7f7f7f7f7f
+   2025-05 |  react-big-picture | 7baec000-3593-11f0-8080-808080808080 | 5bc4d08f-3e7b-11f0-7f7f-7f7f7f7f7f7f
+   2025-05 |  react-big-picture | e4153000-3194-11f0-8080-808080808080 | 5bc4d08f-3e7b-11f0-7f7f-7f7f7f7f7f7f
+   2025-05 |  react-big-picture | 4c7ba000-2d96-11f0-8080-808080808080 | 5bc4d08f-3e7b-11f0-7f7f-7f7f7f7f7f7f
+   2025-05 |  react-big-picture | 0b3b1000-2673-11f0-8080-808080808080 | 5bc4d08f-3e7b-11f0-7f7f-7f7f7f7f7f7f
+   2025-05 | nodejs-big-picture | 13485000-3992-11f0-8080-808080808080 | 5d4a508f-39c4-11f0-7f7f-7f7f7f7f7f7f
+   2025-05 | nodejs-big-picture | 7baec000-3593-11f0-8080-808080808080 | 5d4a508f-39c4-11f0-7f7f-7f7f7f7f7f7f
+   2025-05 | nodejs-big-picture | e4153000-3194-11f0-8080-808080808080 | 5d4a508f-39c4-11f0-7f7f-7f7f7f7f7f7f
+   2025-05 | nodejs-big-picture | 4c7ba000-2d96-11f0-8080-808080808080 | 5d4a508f-39c4-11f0-7f7f-7f7f7f7f7f7f
+   2025-05 | nodejs-big-picture | 0b3b1000-2673-11f0-8080-808080808080 | 5d4a508f-39c4-11f0-7f7f-7f7f7f7f7f7f
+   2025-06 |  react-big-picture | dfbd9000-5512-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+   2025-06 |  react-big-picture | f3508000-4f81-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+   2025-06 |  react-big-picture | 06e37000-49f1-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+   2025-06 |  react-big-picture | 1a766000-4460-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+   2025-06 |  react-big-picture | 2e095000-3ecf-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+   2025-07 |  react-big-picture | 2e7b1000-6981-11f0-8080-808080808080 | 06b780da-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 |  react-big-picture | 96e18000-6582-11f0-8080-808080808080 | 06b780da-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 |  react-big-picture | 06b780d0-6215-11f0-8c27-9f5b4c3f63d7 | 06b780da-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 |  react-big-picture | ff47f000-6183-11f0-8080-808080808080 | 06b780da-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 |  react-big-picture | 67ae6000-5d85-11f0-8080-808080808080 | 06b780da-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 |  react-big-picture | 266dd000-5662-11f0-8080-808080808080 | 06b780da-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | 2e7b1000-6981-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | 96e18000-6582-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | 0155c980-6215-11f0-8c27-9f5b4c3f63d7 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | ff47f000-6183-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | 67ae6000-5d85-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | 266dd000-5662-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-06 | nodejs-big-picture | dfbd9000-5512-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+   2025-06 | nodejs-big-picture | f3508000-4f81-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+   2025-06 | nodejs-big-picture | 06e37000-49f1-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+   2025-06 | nodejs-big-picture | 1a766000-4460-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+   2025-06 | nodejs-big-picture | 2e095000-3ecf-11f0-8080-808080808080 | 5429508f-560e-11f0-7f7f-7f7f7f7f7f7f
+
+(32 rows)
+cqlsh:pluralsight> select * from course_page_views where course_id='nodejs-big-picture';
+InvalidRequest: Error from server: code=2200 [Invalid query] message="Cannot execute this query as it might involve data filtering and thus may have unpredictable performance. If you want to execute this query despite the performance unpredictability, use ALLOW FILTERING"
+cqlsh:pluralsight> select * from course_page_views where course_id='nodejs-big-picture' and bucket_id='2025-07';
+
+ bucket_id | course_id          | view_id                              | last_view_id
+-----------+--------------------+--------------------------------------+--------------------------------------
+   2025-07 | nodejs-big-picture | 2e7b1000-6981-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | 96e18000-6582-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | 0155c980-6215-11f0-8c27-9f5b4c3f63d7 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | ff47f000-6183-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | 67ae6000-5d85-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+   2025-07 | nodejs-big-picture | 266dd000-5662-11f0-8080-808080808080 | 0155c98a-6215-11f0-8c27-9f5b4c3f63d7
+
+(6 rows)
+cqlsh:pluralsight> select bucket_id,course_id,toTimestamp(view_id),toTimestamp(last_view_id) from course_page_views where course_id='nodejs-big-picture' and bucket
+_id='2025-07';
+
+ bucket_id | course_id          | system.totimestamp(view_id)     | system.totimestamp(last_view_id)
+-----------+--------------------+---------------------------------+----------------------------------
+   2025-07 | nodejs-big-picture | 2025-07-25 18:00:00.000000+0000 |  2025-07-16 07:18:00.472000+0000
+   2025-07 | nodejs-big-picture | 2025-07-20 16:00:00.000000+0000 |  2025-07-16 07:18:00.472000+0000
+   2025-07 | nodejs-big-picture | 2025-07-16 07:18:00.472000+0000 |  2025-07-16 07:18:00.472000+0000
+   2025-07 | nodejs-big-picture | 2025-07-15 14:00:00.000000+0000 |  2025-07-16 07:18:00.472000+0000
+   2025-07 | nodejs-big-picture | 2025-07-10 12:00:00.000000+0000 |  2025-07-16 07:18:00.472000+0000
+   2025-07 | nodejs-big-picture | 2025-07-01 10:00:00.000000+0000 |  2025-07-16 07:18:00.472000+0000
+
+(6 rows)
+cqlsh:pluralsight>
