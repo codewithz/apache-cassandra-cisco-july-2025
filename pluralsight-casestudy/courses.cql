@@ -194,5 +194,15 @@ update courses set clips= ['Introduction', 'Installation', 'Components'] where i
 
 select * from courses where id = 'react-big-picture' and module_id = 1;
 
--- map  
 
+-- adding user defined types for clips 
+
+create type clip (name text, duration int);
+
+alter table courses drop clips;
+
+alter table courses add module_clips list<frozen<clip>>;
+
+insert into courses(id,module_id,module_clips) values ('react-big-picture',1,[{name:'Course Overview',duration:70}]);
+
+update courses set module_clips = module_clips + [{name:'Why React?',duration:900}] where id = 'react-big-picture' and module_id = 2;
