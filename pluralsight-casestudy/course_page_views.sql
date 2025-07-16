@@ -32,3 +32,11 @@ insert into course_page_views (course_id, view_id) values ('react-big-picture', 
 insert into course_page_views (course_id, view_id) values ('react-big-picture', now()) using ttl 31536000; -- 1 year TTL
 
 INSERT INTO course_page_views (course_id, view_id) VALUES ('react-big-picture', minTimeuuid('2025-07-15T10:00:00Z')) USING TTL 31536000;
+
+
+Select toTimestamp(view_id) from course_page_views where course_id='react-big-picture';
+
+Select toTimestamp(view_id) from course_page_views where course_id='react-big-picture'
+ and view_id >= minTimeuuid('2025-07-15T10:00:00Z') and view_id <= maxTimeuuid('2025-07-15T11:00:00Z');
+truncate course_page_views;
+
